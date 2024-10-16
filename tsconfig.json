@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es2020",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "lib": ["ES6"],
+        "rootDir": "./src",
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "strict": true,
+        "removeComments": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"],
+    "lib": ["esnext"],
+    "ts-node": {
+        "esm": true
+    }
+}
