@@ -1,8 +1,11 @@
 import { IncomingMessage } from 'http';
 
-export const getLastEndpoint = (endpoint: string) => {
-    const parts = endpoint.split('/');
-    return parts[parts.length - 1];
+export const getEndpointData = (endpoint: string) => {
+    const parts = endpoint.split('/').filter((string) => string);
+    return {
+        partsAmount: parts.length,
+        last: parts[parts.length - 1]
+    };
 };
 
 export const parseBody = (req: IncomingMessage) =>

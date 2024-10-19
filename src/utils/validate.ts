@@ -8,7 +8,7 @@ export const validateUser = (fields: User) => {
             Array.isArray(data) &&
             data.every((item) => typeof item === 'string')
     };
-    return Object.entries(fields).every(([key, value]) =>
-        rules[key as keyof typeof rules](value)
+    return Object.keys(rules).every((key) =>
+        rules[key as keyof typeof rules](fields[key as keyof typeof fields])
     );
 };
