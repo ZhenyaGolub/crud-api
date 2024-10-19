@@ -84,10 +84,54 @@ export class UserService extends BaseService {
             );
         }
     }
-    deleteUser(
+    async deleteUser(
         req: IncomingMessage,
         res: ServerResponse<IncomingMessage> & { req: IncomingMessage }
-    ) {}
+    ) {
+        const { last, partsAmount } = getEndpointData(req.url!);
+        if (partsAmount === 3) {
+            const isValidId = validate(last);
+
+            if (isValidId) {
+                const foundedUser = this.db.find(({ id }) => last === id);
+                if (foundedUser) {
+                    this.db = this.db.filter(({ id }) => id !== last);
+                    res.statusCode = 204;
+                    res.end();
+                } else {
+                    this.sendError(
+                        req,
+                        res,
+                        {
+                            title: 'Not found',
+                            message: `There is no user with id: ${last}`
+                        },
+                        404
+                    );
+                }
+            } else {
+                this.sendError(
+                    req,
+                    res,
+                    {
+                        title: 'Invalid',
+                        message: `Id: ${last} is invalid`
+                    },
+                    400
+                );
+            }
+        } else {
+            this.sendError(
+                req,
+                res,
+                {
+                    title: 'Not found',
+                    message: 'There is no method for this HTTP method'
+                },
+                404
+            );
+        }
+    }
     async updateUser(
         req: IncomingMessage,
         res: ServerResponse<IncomingMessage> & { req: IncomingMessage }
