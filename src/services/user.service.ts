@@ -88,10 +88,61 @@ export class UserService extends BaseService {
         req: IncomingMessage,
         res: ServerResponse<IncomingMessage> & { req: IncomingMessage }
     ) {}
-    updateUser(
+    async updateUser(
         req: IncomingMessage,
         res: ServerResponse<IncomingMessage> & { req: IncomingMessage }
-    ) {}
+    ) {
+        const { last, partsAmount } = getEndpointData(req.url!);
+        if (partsAmount === 3) {
+            const body = (await parseBody(req)) as User;
+            const isValidId = validate(last);
+            const isValidBody = validateUser(body);
+
+            if (isValidBody && isValidId) {
+                const foundedUser = this.db.find(({ id }) => last === id);
+                if (foundedUser) {
+                    const updatedUser = { id: foundedUser.id, ...body };
+                    this.db = [
+                        ...this.db.filter(({ id }) => id !== last),
+                        updatedUser
+                    ];
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(updatedUser));
+                } else {
+                    this.sendError(
+                        req,
+                        res,
+                        {
+                            title: 'Not found',
+                            message: `There is no user with id: ${last}`
+                        },
+                        404
+                    );
+                }
+            }
+            if (!isValidId) {
+                this.sendError(
+                    req,
+                    res,
+                    {
+                        title: 'Invalid',
+                        message: `Id: ${last} is invalid`
+                    },
+                    400
+                );
+            }
+        } else {
+            this.sendError(
+                req,
+                res,
+                {
+                    title: 'Not found',
+                    message: 'There is no method for this HTTP method'
+                },
+                404
+            );
+        }
+    }
 }
 
 export const userService = new UserService();
