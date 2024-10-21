@@ -1,11 +1,24 @@
 {
-  "name": "crud-api",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+    "name": "crud-api",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start:dev": "nodemon",
+        "build": "tsc",
+        "start:prod": "npm run build && node dist/index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@types/node": "^22.7.5",
+        "@types/uuid": "^10.0.0",
+        "nodemon": "^3.1.7",
+        "typescript": "^5.6.3"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "uuid": "^10.0.0"
+    }
 }
